@@ -1,8 +1,7 @@
 ## Notice
 I just wrote this, don't analyze it as it's very nasty.
+For now I've kind of setup a decent folder structure.
 
-For now this script will only check for RueDuCommerce.
-I'll soon set up a better folder structure for readability's sake.
 
 ## Getting Started
 1. To run this script you'll require node.
@@ -14,3 +13,7 @@ I'll soon set up a better folder structure for readability's sake.
 
 ## Additional info
 To terminate job `CTRL+C` for Linux, Windows, and it should probably work the same way for MacOS _(hopefully)_.
+
+## Pull Requests
+Don't hesitate to propose website that aren't added yet.
+**PS: Suggestions are appreciated, with good reasons.**
