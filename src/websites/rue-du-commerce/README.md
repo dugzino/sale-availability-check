@@ -12,6 +12,8 @@ const searchArray = [
 ];
 
 const rueDuCommerce = new RueDuCommerce(searchArray);
-const searches = rueDuCommerce.runChecks();
+const searches = [
+  rueDuCommerce.runChecks(),
+];
 ```
 **Try to be precise with the search's value**
