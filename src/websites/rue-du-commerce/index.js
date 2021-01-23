@@ -28,15 +28,15 @@ class RueDuCommerce {
   }
 
   getAvailability (links, url, articleName) {
-    return Promise.all(links.map((_LINK) => {
-      return fetch(urlBuilder(url, _LINK))
+    return Promise.all(links.map((link) => {
+      return fetch(urlBuilder(url, link))
         .then(getHtml)
         .then((html) => !cheerio.load(html)('#product_action a').first().attr('style', 'display:none;'))
         .then((isAvailable) => {
           if (isAvailable) {
-            console.log(`${articleName}:`, `${urlBuilder(url, _LINK)}`.white.bgGreen);
+            console.log(`${articleName}:`, `${urlBuilder(url, link)}`.white.bgGreen);
           } else {
-            console.log(`${articleName}:`, `${urlBuilder(url, _LINK)}`.white.bgRed);
+            console.log(`${articleName}:`, `${urlBuilder(url, link)}`.white.bgRed);
           }
           return isAvailable;
         });
@@ -45,11 +45,14 @@ class RueDuCommerce {
 }
 
 const getHtml = (res) => res.text();
+const searchCase = (search) => search.split(' ').filter(Boolean).join('-');
 
 const paramsBuilder = (array) => {
   return array
     .filter(Boolean)
-    .map(({ articleName, search}) => ({ websiteName: HANDLE, articleName, url: URL, path: `/r/${search}.html` }));
+    .map(({ articleName, search }) => {
+      return { websiteName: HANDLE, articleName, url: URL, path: `/r/${searchCase(search)}.html` };
+    });
 }
 
 module.exports = { RueDuCommerce };
