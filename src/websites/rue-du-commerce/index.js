@@ -1,8 +1,10 @@
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
-const colors = require('colors');
 
-const { urlBuilder } = require('../../utils');
+const {
+  articleAvailability,
+  urlBuilder,
+} = require('../../utils');
 
 const HANDLE = 'RDV';
 const URL = 'https://www.rueducommerce.fr';
@@ -33,11 +35,7 @@ class RueDuCommerce {
         .then(getHtml)
         .then((html) => !cheerio.load(html)('#product_action a').first().toString().includes('display:none'))
         .then((isAvailable) => {
-          if (isAvailable) {
-            console.log(`${articleName}:`, `${urlBuilder(url, link)}`.white.bgGreen);
-          } else {
-            console.log(`${articleName}:`, `${urlBuilder(url, link)}`.white.bgRed);
-          }
+          articleAvailability(articleName, urlBuilder(url, link), isAvailable);
           return isAvailable;
         });
       }));
