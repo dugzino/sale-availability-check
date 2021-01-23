@@ -31,7 +31,7 @@ class RueDuCommerce {
     return Promise.all(links.map((link) => {
       return fetch(urlBuilder(url, link))
         .then(getHtml)
-        .then((html) => !cheerio.load(html)('#product_action a').first().attr('style', 'display:none;'))
+        .then((html) => !cheerio.load(html)('#product_action a').first().toString().includes('display:none'))
         .then((isAvailable) => {
           if (isAvailable) {
             console.log(`${articleName}:`, `${urlBuilder(url, link)}`.white.bgGreen);
