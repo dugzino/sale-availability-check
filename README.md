@@ -9,7 +9,8 @@ So visit: https://nodejs.org/en/download/
 2. `git clone` this repo wherever you want.
 3. Open a terminal inside the repo folder _(where you just cloned)_.
 4. Run `npm i`
-5. Run `node *.js`
+5. Edit `src/search.js` to your liking.
+6. Run `npm run search`
 
 ## Additional info
 To terminate job `CTRL+C` for Linux, Windows, and it should probably work the same way for MacOS _(hopefully)_.
