@@ -2,9 +2,9 @@
   "name": "sale-availability-check",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "src/search.js",
   "scripts": {
-    "search": "node ./src/index.js"
+    "search": "node ./src/search.js"
   },
   "author": "",
   "license": "ISC",
