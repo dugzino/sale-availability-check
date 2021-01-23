@@ -1,7 +1,7 @@
 // Import website you want to use
 
 // TO IGNORE
-const defaultRetryTimer = 90e3; // = 90 seconds
+const defaultRetryTimer = 1800e3; // = 1800 seconds === 30 minutes
 
 // STUFF YOU CAN CUSTOMIZE
 const customRetryTimer = null; // Set the value you want
