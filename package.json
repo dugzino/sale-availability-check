@@ -4,7 +4,10 @@
   "description": "",
   "main": "src/search.js",
   "scripts": {
-    "search": "node ./src/search.js"
+    "search": "node ./src/search.js",
+    "add-service": "node ./scripts/add-search.js",
+    "remove-all-services": "node ./scripts/remove-all-searches.js",
+    "remove-service": "node ./scripts/remove-search.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +15,7 @@
     "cheerio": "^1.0.0-rc.5",
     "colors": "^1.4.0",
     "node": "^15.4.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "prompt": "^1.1.0"
   }
 }
