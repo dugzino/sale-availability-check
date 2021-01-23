@@ -6,15 +6,20 @@ const defaultRetryTimer = 90e3; // = 90 seconds
 // STUFF YOU CAN CUSTOMIZE
 const customRetryTimer = null; // Set the value you want
 
-const searchArray = [];
-const searches = [];
+const searchArray = [
+  // Put here whatever's suggested in the website you want to check's README file
+];
 
-// SCRIPT - TO IGNORE
 const searchFn = () => {
-  if (!searchArray.length) return console.log(`You didn't setup anything to search yet. Check the README files for more info.`);
+  const searches = [
+    // Put here whatever's suggested in the website you want to check's README file
+  ];
+
+  if (!searchArray.length) return console.log(`You forgot to setup in the searchArray. Check the README files for more info.`);
+  if (!searches.length) return console.log(`You forgot to setup in the searches. Check the README files for more info.`);
 
   Promise
-    .all(searches.flatMap(v => v))
+    .all(searches.flatMap((v) => v))
     .then((_) => {
       console.log();
       setTimeout(searchFn, customRetryTimer || defaultRetryTimer);
