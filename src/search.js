@@ -9,9 +9,9 @@ const searchArray = [];
 
 // SCRIPT - TO IGNORE
 const searchFn = () => {
-  Promise.all([
-    rueDuCommerce.runChecks(),
-  ].flatMap(v => v)).then((_) => {
+  if (!searchArray.length) return console.log(`You didn't setup anything to search yet. Check the README files for more info.`);
+
+  Promise.all([].flatMap(v => v)).then((_) => {
     console.log();
     setTimeout(searchFn, customRetryTimer || defaultRetryTimer);
   });
