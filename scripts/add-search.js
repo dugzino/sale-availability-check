@@ -4,8 +4,6 @@ const fs = require('fs');
 const { logger } = require('../src/utils');
 const { files } = require('./utils');
 
-const stringToSplit = '];'; // This is used as a marker as to where to add the new search.
-
 const properties = [
   {
     name: 'articleName',
@@ -27,9 +25,10 @@ prompt.start();
 prompt.get(properties, function (err, results) {
   if (err) { return onErr(err); }
 
-  fs.readFile(files.searchParams.fileName, (err, data) => {
-    if (err) { return createFile(results); }
-    editFile(results, data.toString());
+  fs.readFile(files.searchParams.schema, (err, data) => {
+    const { schema } = JSON.parse(data);
+    if (!schema || !schema.length) { return createFile(results); }
+    editFile(results);
   })
 });
 
@@ -39,44 +38,39 @@ const onErr = (err) => {
 }
 
 const createFile = (results) => {
-  logger("Hmm, the file doesn't exist yet. Let's create it, shall we?", 'warn');
+  fs.writeFile(files.searchParams.module, fileBuilder(results), (err) => {
+    if (err) { return console.error(err); }
+    logger("Hmm, the file doesn't exist yet. Let's create it, shall we?", 'warn');
+    logger("File created successfully!", 'success');
+  });
 
-  return fs.writeFile(
-    files.searchParams.fileName,
-    fileBuilder(results),
-    (err) => {
-      if (err) { return console.error(err); }
-      logger("File created successfully!", 'success');
-    }
-  );
+  const schema = JSON.stringify({ schema: [ results ] }, null, 2);
+  fs.writeFile(files.searchParams.schema, schema, (err) => {
+    if (err) logger("Hmmm it seems something went wrong! Create an issue on Github, please.", 'error');
+    logger("Schema created successfully!", 'success');
+  });
 }
 
-const editFile = ({ articleName, search }, data) => {
+const editFile = (results) => {
   logger("Noice! The file already exists. Let's add the new search!", 'warn');
 
-  const splittedData = data.split(stringToSplit);
-  const newData = `${splittedData[0]}  { articleName: '${articleName}', search: '${search}' },\n${stringToSplit}${splittedData[1]}`;
+  fs.readFile(files.searchParams.schema, (err, data) => {
+    const { schema } = JSON.parse(data);
+    const newSchema = JSON.stringify({ schema: [ ...schema, results ] }, null, 2);
 
-  fs.writeFile(
-    files.searchParams.fileName,
-    newData,
-    (err) => {
+    fs.writeFile(files.searchParams.schema, newSchema, (err) => {
       if (err) { return console.error(err); }
       logger("New search added successfully!", 'success');
-    }
-  );
+    })
+  })
 }
 
-const fileBuilder = ({ articleName, search, website = 'rue du commerce' }) => {
+const fileBuilder = ({ website = 'rue du commerce' }) => {
   const _website = getWebsiteName(website);
-  return`const { ${_website.className} } = require("${files.searchParams.importDir(_website)}");
-
-const searchArray = [
-  { articleName: '${articleName}', search: '${search}' },
-];
+  return `const { ${_website.className} } = require('${files.searchParams.importDir(_website)}');
 
 module.exports = {
-  websiteService: new ${_website.className}(searchArray),
+  websiteService: new ${_website.className}(require('./search-params.schema.json')),
 }`;
 }
 

@@ -1,21 +1,11 @@
-const fs = require('fs');
-
 const { logger } = require('../src/utils');
 
 const files = {
   searchParams: {
-    fileName: './src/config/search-params.js',
+    module: './src/config/search-params.js',
     importDir: ({ fileName }) => `../websites-services/${fileName}`,
+    schema: './src/config/search-params.schema.json',
   },
-}
-
-const deleteFile =() => {
-  logger("So you want to delete the file, huh? Let's delete it.", 'warn');
-
-  fs.unlink(files.searchParams.fileName, (err) => {
-    if (err) { return logger("Hmmm file doesn't exist yet. So nothing happened.", 'warn'); }
-    logger("File deleted successfully!", 'error');
-  });
 }
 
 const onErr =(err) => {
@@ -25,6 +15,5 @@ const onErr =(err) => {
 
 module.exports = {
   files,
-  deleteFile,
   onErr,
 }
