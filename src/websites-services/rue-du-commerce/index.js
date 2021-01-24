@@ -9,7 +9,6 @@ const {
 const HANDLE = 'RDV';
 const URL = 'https://www.rueducommerce.fr';
 
-// Read the README file for info
 class RueDuCommerce {
   constructor (searchArray, options) {
     this.searches = paramsBuilder(searchArray);
