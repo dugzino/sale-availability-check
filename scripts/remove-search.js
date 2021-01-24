@@ -1,18 +1,14 @@
 const prompt = require('prompt');
 const fs = require('fs');
-const colors = require("colors");
 
-const { files, deleteFile, onErr } = require('./utils');
-
-// TODO
-// console.log(`PS: As we only have RueDuCommerce for now, whatever you input, it'll be for a search on RDC.`.yellow);
+const { files, onErr } = require('./utils');
+const { logger } = require('../src/utils');
 
 const properties = [
   {
     name: 'articleName',
     type: 'string',
-    replace: '',
-    description: 'Want to remove an article? Type its name or leave empty to remove all. eg: "3080 RTX"',
+    description: 'Want to remove an article? Type its name. eg: "3080 RTX"',
   },
 ];
 
@@ -24,13 +20,17 @@ prompt.start();
 prompt.get(properties, function (err, { articleName }) {
   if (err) { return onErr(err); }
 
-  if (!articleName) return deleteFile();
   fs.readFile(files.searchParams.fileName, (err, data) => {
-    if (!data.toString().includes(results.articleName)) console.log("Couldn't find the article you're trying to remove.");
+    if (!data) {
+      return logger("File doesn't exist yet. Start by using 'npm run add-service' before considering removing a service.", 'error');
+    }
+    if (!data.toString().includes(results.articleName)) {
+      return logger("Couldn't find the article you're trying to remove.", 'error');
+    }
     deleteArticle(articleName, data)
   });
 });
 
 const deleteArticle = (articleName, data) => {
-  return console.log("Not yet implemented! Soon...".red);
+  return logger("Sorry, but it's not yet implemented!", 'error');
 }

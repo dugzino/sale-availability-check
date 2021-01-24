@@ -1,13 +1,10 @@
 const prompt = require('prompt');
 const fs = require('fs');
-const colors = require("colors");
 
+const { logger } = require('../src/utils');
 const { files } = require('./utils');
 
 const stringToSplit = '];'; // This is used as a marker as to where to add the new search.
-
-// TODO
-// console.log(`PS: As we only have RueDuCommerce for now, whatever you input, it'll be for a search on RDC.`.yellow);
 
 const properties = [
   {
@@ -37,25 +34,25 @@ prompt.get(properties, function (err, results) {
 });
 
 const onErr = (err) => {
-  console.log(err);
+  logger(err, 'error');
   return 1;
 }
 
 const createFile = (results) => {
-  console.log("Hmm, the file doesn't exist yet. Let's create it, shall we?".yellow);
+  logger("Hmm, the file doesn't exist yet. Let's create it, shall we?", 'warn');
 
   return fs.writeFile(
     files.searchParams.fileName,
     fileBuilder(results),
     (err) => {
       if (err) { return console.error(err); }
-      console.log("File created successfully!".green);
+      logger("File created successfully!", 'success');
     }
   );
 }
 
 const editFile = ({ articleName, search }, data) => {
-  console.log("Noice! The file already exists. Let's add the new search!".yellow);
+  logger("Noice! The file already exists. Let's add the new search!", 'warn');
 
   const splittedData = data.split(stringToSplit);
   const newData = `${splittedData[0]}  { articleName: '${articleName}', search: '${search}' },\n${stringToSplit}${splittedData[1]}`;
@@ -65,7 +62,7 @@ const editFile = ({ articleName, search }, data) => {
     newData,
     (err) => {
       if (err) { return console.error(err); }
-      console.log("New search added successfully!".green);
+      logger("New search added successfully!", 'success');
     }
   );
 }

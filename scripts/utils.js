@@ -1,5 +1,6 @@
-const { colors } = require("prompt");
 const fs = require('fs');
+
+const { logger } = require('../src/utils');
 
 const files = {
   searchParams: {
@@ -9,16 +10,16 @@ const files = {
 }
 
 const deleteFile =() => {
-  console.log("So you want to delete the file, huh? Let's delete it.".yellow);
+  logger("So you want to delete the file, huh? Let's delete it.", 'warn');
 
   fs.unlink(files.searchParams.fileName, (err) => {
-    if (err) { return console.log("Hmmm file doesn't exist yet. So nothing happened.".yellow); }
-    console.log("File deleted successfully!".red);
+    if (err) { return logger("Hmmm file doesn't exist yet. So nothing happened.", 'warn'); }
+    logger("File deleted successfully!", 'error');
   });
 }
 
 const onErr =(err) => {
-  console.log(err);
+  logger(err, 'error');
   return 1;
 }
 
