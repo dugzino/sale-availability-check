@@ -68,9 +68,10 @@ const editFile = (results) => {
 const fileBuilder = ({ website = 'rue du commerce' }) => {
   const _website = getWebsiteName(website);
   return `const { ${_website.className} } = require('${files.searchParams.importDir(_website)}');
+const data = require('./search-params.schema.json');
 
 module.exports = {
-  websiteService: new ${_website.className}(require('./search-params.schema.json')),
+  websiteService: new ${_website.className}(data.schema),
 }`;
 }
 

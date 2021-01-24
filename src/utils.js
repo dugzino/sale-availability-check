@@ -1,23 +1,24 @@
 const colors = require('colors');
 
 const loggerStyle = {
-  info: { color: 'white', bg: 'bgBlack' },
-  warn: { color: 'yellow', bg: 'bgBlack' },
-  error: { color: 'red', bg: 'bgBlack' },
-  success: { color: 'green', bg: 'bgBlack' },
+  info: { color: 'white' },
+  warn: { color: 'yellow' },
+  error: { color: 'red' },
+  success: { color: 'green' },
 }
 
 // Utils
 const urlBuilder = (url, path) => `${url}${path}`;
 
 const articleAvailability = (articleName, url, isAvailable) => {
-  const logType = isAvailable ? 'sucess' : 'error';
-  logger(`${articleName} -`, `${url}`, logType);
+  const logType = isAvailable ? 'success' : 'error';
+  logger(url, logType, `${articleName} -`);
 }
 
-const logger = (string, logType = 'info') => {
-  const { color, bg } = loggerStyle[logType];
-  console.log(string[color][bg]);
+const logger = (string, logType = 'info', preString) => {
+  const { color } = loggerStyle[logType];
+  if (preString) return console.log(preString, string[color]);
+  console.log(string[color]);
 }
 
 module.exports = {

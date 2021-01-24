@@ -6,39 +6,50 @@ const {
   urlBuilder,
 } = require('../../utils');
 
-const HANDLE = 'RDV';
-const URL = 'https://www.rueducommerce.fr';
+const WEBSITE_HANDLE = 'RDC';
+const WEBSITE_URL = 'https://www.rueducommerce.fr';
+const searchBuilder = (path) => `${WEBSITE_URL}/r/${path}.html`;
 
 class RueDuCommerce {
-  constructor (searchArray, options) {
+  constructor(searchArray, options) {
     this.searches = paramsBuilder(searchArray);
+    this.articleLinks = null; // Object? Storing article links to lessen the amount of calls
   }
 
   runChecks () {
-    return this.searches.map(({ url, path, articleName }) => fetch(urlBuilder(url, path))
-      .then(this.getLinks)
-      .then((links) => this.getAvailability(links, url, articleName)))
+    if (this.articleLinks) return this.getAvailability();
+
+    return this.searches.map(({ path, articleName }) => {
+      return fetch(searchBuilder(path))
+        .then((response) => this.getLinks(response, articleName))
+        .then((links) => {
+          if (!this.articleLinks) this.articleLinks = {};
+          this.articleLinks[articleName] = links;
+        });
+      });
   }
 
-  getLinks (response) {
+  getLinks (response, articleName) {
     return response.text()
       .then((html) => {
         const $ = cheerio.load(html);
         return $('.item__title a').map((_, el) => $(el).attr('href')).toArray();
-      })
+      });
   }
 
-  getAvailability (links, url, articleName) {
-    return Promise.all(links.map((link) => {
-      return fetch(urlBuilder(url, link))
-        .then(getHtml)
-        .then((html) => !cheerio.load(html)('#product_action a').first().toString().includes('display:none'))
-        .then((isAvailable) => {
-          articleAvailability(articleName, urlBuilder(url, link), isAvailable);
-          return isAvailable;
-        });
+  getAvailability () {
+    return Object.keys(this.articleLinks).forEach((key) => {
+      return Promise.all(this.articleLinks[key].map((link) => {
+        return fetch(urlBuilder(WEBSITE_URL, link))
+          .then(getHtml)
+          .then((html) => !cheerio.load(html)('#product_action a').first().toString().includes('display:none'))
+          .then((isAvailable) => {
+            articleAvailability(key, urlBuilder(WEBSITE_URL, link), isAvailable);
+            return isAvailable;
+          });
       }));
-    }
+    })
+  }
 }
 
 const getHtml = (res) => res.text();
@@ -47,9 +58,7 @@ const searchCase = (search) => search.split(' ').filter(Boolean).join('-');
 const paramsBuilder = (array) => {
   return array
     .filter(Boolean)
-    .map(({ articleName, search }) => {
-      return { websiteName: HANDLE, articleName, url: URL, path: `/r/${searchCase(search)}.html` };
-    });
+    .map(({ articleName, search }) => ({ articleName, path: searchCase(search) }));
 }
 
 module.exports = { RueDuCommerce };
