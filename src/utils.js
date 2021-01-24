@@ -12,11 +12,12 @@ const urlBuilder = (url, path) => `${url}${path}`;
 
 const articleAvailability = (articleName, url, isAvailable) => {
   const logType = isAvailable ? 'sucess' : 'error';
-  logger(`${articleName} -`, `${url}`, logType);
+  logger(url, logType, `${articleName} -`);
 }
 
-const logger = (string, logType = 'info') => {
+const logger = (string, logType = 'info', preString) => {
   const { color, bg } = loggerStyle[logType];
+  if (preString) return console.log(preString, string[color][bg]);
   console.log(string[color][bg]);
 }
 
