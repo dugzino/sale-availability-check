@@ -11,7 +11,7 @@ const loggerStyle = {
 const urlBuilder = (url, path) => `${url}${path}`;
 
 const articleAvailability = (articleName, url, isAvailable) => {
-  const logType = isAvailable ? 'sucess' : 'error';
+  const logType = isAvailable ? 'success' : 'error';
   logger(url, logType, `${articleName} -`);
 }
 
