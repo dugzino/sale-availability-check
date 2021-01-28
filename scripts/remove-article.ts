@@ -4,33 +4,29 @@ import fs from 'fs';
 import { logger } from '../src/utils';
 import { files } from './utils';
 
-import { ISearchSchemaItem, SearchSchemaType } from '../src/config/schema.types';
+import { ISearchSchemaItem } from '../src/config/schema.types';
 
-type questionsType = Array<{ prop: string; question: string }>;
-const questions: questionsType = [
-  {
-    prop: 'articleName',
-    question: 'Want to remove an article? Type its name. eg: "3080 RTX"',
-  },
-];
+type questionType = { prop: string; question: string };
+const question: questionType = {
+  prop: 'articleName',
+  question: 'Want to remove an article? Type its name. eg: "3080 RTX"',
+};
 
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
-questions.forEach(({ question }) => {
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+rl.question('\x1b[33m' + question.question + '?\x1b[0m\n', (answer: string) => {
+  fs.readFile(files.searchParams.schema, (error, data: any) => {
+    const { schema } = JSON.parse(data);
 
-  rl.question('\x1b[33m' + question + '?\x1b[0m\n', (answer: string) => {
-    fs.readFile(files.searchParams.schema, (error, data: any) => {
-      const { schema } = JSON.parse(data);
+    if (!schema.length) {
+      logger("File doesn't have any searches stored yet. Start by using 'npm run add-service'.", 'error');
+    } else if (schema.some(({ articleName }) => articleName === answer)) {
+      deleteArticle(answer, schema);
+    } else {
+      logger("Couldn't find the article you're trying to remove.", 'error');
+    }
 
-      if (!schema.length) {
-        logger("File doesn't have any searches stored yet. Start by using 'npm run add-service'.", 'error');
-      } else if (schema.some(({ articleName }) => articleName === answer)) {
-        deleteArticle(answer, schema);
-      } else {
-        logger("Couldn't find the article you're trying to remove.", 'error');
-      }
-      rl.close();
-    });
+    rl.close();
   });
 });
 

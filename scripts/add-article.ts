@@ -3,9 +3,9 @@ import fs from 'fs';
 
 import { logger } from '../src/utils';
 import { files } from './utils';
-import { SearchSchemaType } from '../src/config/schema.types';
 
-const questions = [
+type questionsType = Array<{ prop: string; question: string }>;
+const questions: questionsType = [
   {
     prop: 'articleName',
     question: 'Add the name of the article you\'re looking for. eg: "3080 RTX"',
@@ -22,14 +22,14 @@ let answers: IAnswers = { articleName: '', search: '' };
 let rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
 const question1 = () => new Promise((resolve) => {
-  rl.question('\x1b[33m' + questions[0].question + '?\x1b[0m\n', (answer) => {
+  rl.question('\x1b[33m' + questions[0].question + '?\x1b[0m\n', (answer: string) => {
     answers[questions[0].prop] = answer;
     resolve('');
   });
 });
 
 const question2 = () => new Promise((resolve) => {
-  rl.question('\x1b[33m' + questions[1].question + '?\x1b[0m\n', (answer) => {
+  rl.question('\x1b[33m' + questions[1].question + '?\x1b[0m\n', (answer: string) => {
     answers[questions[1].prop] = answer;
 
     fs.readFile(files.searchParams.schema, (error, data: any) => {
