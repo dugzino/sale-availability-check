@@ -81,12 +81,10 @@ const editFile = () => {
 
 const fileBuilder = ({ website = 'rue du commerce' }): string => {
   const _website = getWebsiteName(website);
-  return `const { ${_website.className} } = require('${files.searchParams.importDir(_website)}');
-const data = require('./search-params.schema.json');
+  return `import { ${_website.className} } from '${files.searchParams.importDir(_website)}';
+import data from './search-params.schema.json';
 
-module.exports = {
-  websiteService: new ${_website.className}(data.schema),
-}`;
+export const websiteService: any = new ${_website.className}(data.schema);`;
 }
 
 const getWebsiteName = (input: string): { className: string, fileName: string } => {
