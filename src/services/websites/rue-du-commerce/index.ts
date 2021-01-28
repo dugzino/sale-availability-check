@@ -1,5 +1,5 @@
 import cheerio from 'cheerio';
-import Axios, { AxiosResponse } from 'axios';
+import Axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 import { articleAvailability, urlBuilder } from '../../../utils';
 import { searchParamsType, searchSchemaType } from '../website-service.types';
@@ -9,9 +9,9 @@ const WEBSITE_URL = 'https://www.rueducommerce.fr';
 const searchBuilder = (path) => `${WEBSITE_URL}/r/${path}.html`;
 
 export class RueDuCommerce {
-  axios: any;
+  axios: AxiosInstance;
   searchParams: searchParamsType;
-  articleLinks: any;
+  articleLinks: any[''];
 
   constructor(searchArray: searchSchemaType) {
     this.axios = Axios.create();
@@ -32,7 +32,7 @@ export class RueDuCommerce {
       });
   }
 
-  getLinks (response: AxiosResponse): any[] {
+  getLinks (response: AxiosResponse): any[''] {
     const $ = cheerio.load(response.data);
     return $('.item__title a').map((_, el) => $(el).attr('href')).toArray();
   }
