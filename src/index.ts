@@ -1,6 +1,6 @@
-const { customRetryTimer, websiteService } = require('./config/index');
+import { customRetryTimer, websiteService } from './config/index';
 
-const { logger } = require('./utils');
+import { logger } from './utils';
 
 // 30 minutes; Lowering might trigger the website's
 const defaultRetryTimer = 18e5;
