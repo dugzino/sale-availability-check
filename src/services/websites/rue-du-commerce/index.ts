@@ -1,8 +1,8 @@
 import cheerio from 'cheerio';
 import Axios, { AxiosResponse } from 'axios';
 
-import { articleAvailability, urlBuilder } from '../../utils';
-import { searchParamsType, searchSchemaType } from '../services.types';
+import { articleAvailability, urlBuilder } from '../../../utils';
+import { searchParamsType, searchSchemaType } from '../website-service.types';
 
 const WEBSITE_HANDLE = 'RDC';
 const WEBSITE_URL = 'https://www.rueducommerce.fr';
